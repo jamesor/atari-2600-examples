@@ -6,6 +6,7 @@ An assortment of test programs I've created while learning how to program the 65
 
 + Test 1 - Simple test painting the screen blue
 + Test 2 - Gradient background
++ Test 3 - Gradient background with color data and nested scanline loop
 
 ## Tutorials
 
