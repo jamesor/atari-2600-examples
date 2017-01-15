@@ -5,6 +5,7 @@ An assortment of test programs I've created while learning how to program the 65
 # Tests
 
 + Test 1 - Simple test painting the screen blue
++ Test 2 - Gradient background
 
 ## Tutorials
 
