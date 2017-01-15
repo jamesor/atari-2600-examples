@@ -4,9 +4,18 @@ An assortment of test programs I've created while learning how to program the 65
 
 # Tests
 
-+ Test 1 - Simple test painting the screen blue
-+ Test 2 - Gradient background
-+ Test 3 - Gradient background with color data and nested scanline loop
+[Test 1](test-01.asm) - Simple test painting the screen blue
+
+![Test 1](snaps/test-01.png "Test 1")
+
+[Test 2](test-02.asm) - Gradient background
+
+![Test 2](snaps/test-02.png "Test 2")
+
+[Test 3](test-03.asm) - Gradient background with color data and nested scanline loop
+
+![Test 3](snaps/test-03.png "Test 3")
+
 
 ## Tutorials
 
