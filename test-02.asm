@@ -24,8 +24,8 @@
 ; CONSTANTS
 ;
 BLACK		= $00
-FIRST_COLOR	= $7F
-COLOR_STEPS	= 15
+FIRST_COLOR	= $7F		; First color at the top of the Background
+COLOR_STEPS	= 15		; Number of colors after the first
 
 ;==============================================================================
 ; VARIBLES
@@ -33,7 +33,8 @@ COLOR_STEPS	= 15
 		SEG.U Variables
 		ORG $80
 
-stopColor	ds 1
+currBgColor	ds 1		; Current BG Color for loop interations
+stopBgColor	ds 1		; When we reach this value, stop decrementing
 
 		SEG
 
@@ -63,8 +64,10 @@ Initialize	LDA #BLACK
 		STA COLUBK
 		
 		LDA #FIRST_COLOR
+		STA currBgColor
+
 		SBC #COLOR_STEPS
-		STA stopColor
+		STA stopBgColor
 
 ;==============================================================================
 ; MAIN LOOP
@@ -119,7 +122,10 @@ Scanline	LDA INTIM	; Loop until the V-Blank timer finishes
 		STA VBLANK	; Begin drawing to screen again
 
 		LDA #FIRST_COLOR
+		STA currBgColor
 .SLLoop		STA COLUBK	; Set the current color as background color
+
+		LDA #2
 		STA WSYNC	; 12 scanlines of the same color
 		STA WSYNC
 		STA WSYNC
@@ -133,8 +139,9 @@ Scanline	LDA INTIM	; Loop until the V-Blank timer finishes
 		STA WSYNC
 		STA WSYNC
 		
-		SBC #$01	; Step down to next color
-		CMP stopColor	; Check to see if we are on the last color
+		DEC currBgColor	; Step down to next color
+		LDA currBgColor
+		CMP stopBgColor	; Check to see if we are on the last color
 		BNE .SLLoop	; And do it again if we aren't
 
 		LDA #2
