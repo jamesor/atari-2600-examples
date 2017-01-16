@@ -101,10 +101,10 @@ VerticalSync	LDA #0
 ; Ideally, we're putting logic here instead.
 ; At 228 clock counts per scan line, we get 36 * 228 = 8208
 ; therefore 6502 instruction count would be 8208 / 3 = 2736
-; 43 * 64 = 2752 (close enough, we'll fix it on the last line)
+; 42 * 64 = 2688 (close enough, we'll fix it on the last line)
 ;
-VerticalBlank	LDA #43
-		STA TIM64T	; Start the timer with 43 ticks
+VerticalBlank	LDA #42
+		STA TIM64T	; Start the timer with 42 ticks
 
 		LDA #0
 		STA WSYNC	; Halt 6502 until end of scanline 3
