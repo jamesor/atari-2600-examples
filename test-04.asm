@@ -28,8 +28,25 @@ PF_REFLECT	= #%00000001	; Mirror the playfield. D0=1
 FRAME_SPEED	= 25		; Num of frames per playfield
 
 BG_COLOR	= $00		; Black
+
 CASTLE_COLOR	= $09		; Medium Gray
+CASTLE_BYTES	= 11
+CASTLE_SLINES	= 8
+
+DOOR_COLOR	= $F3		; Dark Brown
+DOOR_SLINES	= 32
+
+DIRT_COLOR	= $F3		; Dark Brown
+
+WATER_DK_COLOR	= $A8		; Medium Teal
+WATER_LT_COLOR	= $AA		; Light Teal
+WATER_SLINES	= 5
+
 BRIDGE_COLOR	= $F5		; Medium Brown
+BRIDGE_SLINES	= 24
+
+GRASS_COLOR	= $B3
+GRASS_SLINES	= 43
 
 ;==============================================================================
 ; VARIBLES
@@ -115,9 +132,7 @@ VerticalBlank	LDA #42
 ;
 FrameSetup	LDA #CASTLE_COLOR
 		STA COLUPF
-		
-		;LDX #V_PX_COUNT
-		
+
 		RTS
 		; V-BLANK is finished at start of Scanline
 		
@@ -134,23 +149,26 @@ Scanline	LDA INTIM	; Loop until the V-Blank timer finishes
 		;==================================
 		; Castle Top
 		;
-		LDX #11
-.BGCLoop	LDA BGCData_CT,X	; Fetch BG Color
+		LDX #CASTLE_BYTES
+.CTLoop		LDA BGCData_CT,X	; Fetch BG Color
 		STA COLUBK		;   and set it
+
 		LDA PFData0_CT,X	; Fetch PF0 data
 		STA PF0			;   and set it
+
 		LDA PFData1_CT,X	; Fetch PF1 data
 		STA PF1			;   and set it
+
 		LDA PFData2_CT,X	; Fetch PF2 data
 		STA PF2			;   and set it
 
-		LDY #8
-.SLLoop		STA WSYNC	; Halt 6502 until end of scanline
+		LDY #CASTLE_SLINES
+.CTSLLoop	STA WSYNC	; Halt 6502 until end of scanline
 		DEY		; Next scanline
-		BNE .SLLoop	; Keep rendering scanlines until "pixel" is done
+		BNE .CTSLLoop	; Keep rendering scanlines until "pixel" is done
 		
 		DEX		; Next "pixel" row
-		BNE .BGCLoop	; Keep rendering rows until screen is finished
+		BNE .CTLoop	; Keep rendering rows until screen is finished
 
 		;==================================
 		; Castle Door
@@ -162,18 +180,18 @@ Scanline	LDA INTIM	; Loop until the V-Blank timer finishes
 		LDA #%00111111
 		STA PF2
 		
-		LDA #$B1
+		LDA #DOOR_COLOR
 		STA COLUBK
 
-		LDY #32
-.tLoop1		STA WSYNC
+		LDY #DOOR_SLINES
+.CDLoop		STA WSYNC
 		DEY
-		BNE .tLoop1
+		BNE .CDLoop
 		
 		;==================================
 		; Dirt Line
 		;
-		LDA #$F3
+		LDA #DIRT_COLOR
 		STA COLUPF
 		STA COLUBK
 
@@ -184,42 +202,44 @@ Scanline	LDA INTIM	; Loop until the V-Blank timer finishes
 		;
 		LDA #%11110000
 		STA PF0
-		LDA #$A8
+
+		LDA #WATER_DK_COLOR
 		STA COLUPF
-		LDA #$F3
+
+		LDA #BRIDGE_COLOR
 		STA COLUBK
 
-		STA WSYNC
-		STA WSYNC
-		STA WSYNC
-		STA WSYNC
-		STA WSYNC
+		LDY #WATER_SLINES
+.WTRLoop	STA WSYNC
+		DEY
+		BNE .WTRLoop
 		
 		;==================================
 		; Bridge
 		;
-		LDA #$AA
+		LDA #WATER_LT_COLOR
 		STA COLUPF
 
-		LDY #24
-.tLoop2		STA WSYNC
+		LDY #BRIDGE_SLINES
+.BRGLoop	STA WSYNC
 		DEY
-		BNE .tLoop2
+		BNE .BRGLoop
 
 		;==================================
 		; Grass
 		;
-		LDA #$B3
+		LDA #GRASS_COLOR
 		STA COLUBK
+
 		LDA #0
 		STA PF0
 		STA PF1
 		STA PF2
 
-		LDY #43
-.tLoop3		STA WSYNC
+		LDY #GRASS_SLINES
+.GRSLoop	STA WSYNC
 		DEY
-		BNE .tLoop3
+		BNE .GRSLoop
 
 		;==================================
 		; End
