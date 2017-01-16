@@ -16,6 +16,10 @@ An assortment of test programs I've created while learning how to program the 65
 
 ![Test 3](snaps/test-03.png "Test 3")
 
+[Test 4](test-04.asm) - Castle with moat and drawbridge using reflected playfield
+
+![Test 4](snaps/test-04.png "Test 4")
+
 
 ## Tutorials
 
